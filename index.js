@@ -25,7 +25,6 @@ type Props = {
   hiddenMenuOffset: number,
   disableGestures: Function | bool,
   animationFunction: Function,
-  onAnimationComplete: Function,
   onStartShouldSetResponderCapture: Function,
   isOpen: bool,
   bounceBackOnOverdraw: bool,
@@ -164,7 +163,7 @@ export default class SideMenu extends React.Component {
 
     this.props
       .animationFunction(this.state.left, newOffset)
-      .start(this.props.onAnimationComplete);
+      .start();
 
     this.prevLeft = newOffset;
   }
@@ -177,9 +176,14 @@ export default class SideMenu extends React.Component {
     if (this.state.left.__getValue() * this.menuPositionMultiplier() >= 0) {
       let newLeft = this.prevLeft + gestureState.dx;
 
-      if (newLeft > this.props.openMenuOffset + this.props.maxDraggingOffset) {
-        newLeft = this.props.openMenuOffset + this.props.maxDraggingOffset;
+      if (Math.abs(newLeft) > this.props.openMenuOffset + this.props.maxDraggingOffset) {
+        if (newLeft > 0) {
+          newLeft = this.props.openMenuOffset + this.props.maxDraggingOffset;
+        }
+        else
+          newLeft = (this.props.openMenuOffset + this.props.maxDraggingOffset) * -1;
       }
+
       if (!this.props.bounceBackOnOverdraw && Math.abs(newLeft) > this.props.openMenuOffset) {
         newLeft = this.menuPositionMultiplier() * this.props.openMenuOffset;
       }
@@ -270,12 +274,11 @@ SideMenu.propTypes = {
   children: PropTypes.node,
   menu: PropTypes.node,
   openMenuOffset: PropTypes.number,
-  maxDraggingOffset: React.PropTypes.number,
+  maxDraggingOffset: PropTypes.number,
   hiddenMenuOffset: PropTypes.number,
   animationStyle: PropTypes.func,
   disableGestures: PropTypes.oneOfType([PropTypes.func, PropTypes.bool]),
   animationFunction: PropTypes.func,
-  onAnimationComplete: PropTypes.func,
   onStartShouldSetResponderCapture: PropTypes.func,
   isOpen: PropTypes.bool,
   bounceBackOnOverdraw: PropTypes.bool,
@@ -306,7 +309,6 @@ SideMenu.defaultProps = {
     toValue: value,
     friction: 8,
   }),
-  onAnimationComplete: () => { },
   isOpen: false,
   bounceBackOnOverdraw: true,
   autoClosing: true,
