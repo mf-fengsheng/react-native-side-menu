@@ -79,7 +79,7 @@ export default class SideMenu extends React.Component {
     const hiddenMenuOffsetPercentage = props.hiddenMenuOffset / deviceScreen.width;
     const left: Animated.Value = new Animated.Value(
       props.isOpen
-        ? props.openMenuOffset * initialMenuPositionMultiplier
+        ? props.openMenuOffset * initialMenuPositionMultiplier * 10
         : props.hiddenMenuOffset,
     );
 
@@ -307,7 +307,7 @@ SideMenu.defaultProps = {
   }),
   animationFunction: (prop, value) => Animated.spring(prop, {
     toValue: value,
-    friction: 0,
+    friction: 8,
   }),
   isOpen: false,
   bounceBackOnOverdraw: true,
