@@ -307,7 +307,7 @@ SideMenu.defaultProps = {
   }),
   animationFunction: (prop, value) => Animated.spring(prop, {
     toValue: value,
-    friction: 8,
+    friction: 0,
   }),
   isOpen: false,
   bounceBackOnOverdraw: true,
